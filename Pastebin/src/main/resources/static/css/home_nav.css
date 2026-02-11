@@ -46,11 +46,9 @@ nav{
 nav .nav-bar{
     position: relative;
     height: 100%;
-    max-width: 1000px;
     width: 100%;
     background-color:  var(--nav-color);
-    margin: 0 auto;
-    padding: 0 30px;
+    padding: 0 50px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -201,3 +199,4 @@ nav .nav-bar .logo a{
 
     }
 }
+

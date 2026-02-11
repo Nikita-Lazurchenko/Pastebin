@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pastebin</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home_nav.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home_body.css}">
     <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
 </head>
 <body>
@@ -21,6 +22,7 @@
 
             <ul class="nav-links">
                 <li><a href="#">Home</a></li>
+                <li><a href="#">Publications</a></li>
                 <li><a href="#">About</a></li>
                 <li><a href="#">Developer Portfolio</a></li>
                 <li><a href="#">Git Hub</a></li>
@@ -35,6 +37,88 @@
         </div>
     </div>
 </nav>
+
+<main class="container">
+    <div class="main-content">
+        <section class="paste-creation">
+            <h2 class="section-title">New Paste</h2>
+            <form th:action="@{/}" method="post" th:object="${pasteCreation}">
+                <textarea class="paste-area" name="content" placeholder="Enter your text here..." th:value="*{paste}"></textarea>
+
+                <div class="paste-settings">
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <label for="access">Category</label>
+                            <select id="category"  th:field="*{category}">
+                                <option th:each="ctgr: ${Category}"
+                                        th:value="${ctgr}"
+                                        th:text="${ctgr}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label>Tags</label>
+                            <input type="text" name="tags" placeholder="tag1, tag2" th:value="*{tag}">
+                        </div>
+                        <div class="setting-item">
+                            <label>Expiration</label>
+                            <select name="expiration" th:value="*{expiration}">
+                                <option>Never</option>
+                                <option>10 Minutes</option>
+                                <option>1 Hour</option>
+                                <option>1 Day</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label for="access">Access</label>
+                            <select id="access" th:field="*{access}">
+                                <option th:each="acc : ${Access}"
+                                        th:value="${acc}"
+                                        th:text="${acc}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label>Password Protect?</label>
+                            <div class="radio-group">
+                                <div th:each="hasPassOrNo : ${PasswordProtect}" style="display: flex; align-items: center; gap: 5px;">
+                                    <input th:id="${hasPassOrNo}"
+                                           type="radio"
+                                           name="radio"
+                                           th:value="${hasPassOrNo}"
+                                           th:checked="${hasPassOrNo == pasteCreation.hasPassOrNo}">
+                                    <label th:for="${hasPassOrNo}" th:text="${hasPassOrNo}" style="margin-bottom: 0;">hasPassOrNo</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <label>Password</label>
+                            <input type="password" name="password" placeholder="Optional" th:value="${password}">
+                        </div>
+                    </div>
+
+                    <div class="submit-section">
+                        <input type="text" class="paste-name" name="title" placeholder="Paste Name / Title" th:value="${pasteName}">
+                        <button type="submit" class="btn-publish">Create New Paste</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <aside class="recent-pastes">
+            <h3 class="section-title">Public Pastes</h3>
+            <ul class="pastes-list">
+                <li class="paste-item">
+                    <i class='bx bx-file'></i>
+                    <div class="paste-info">
+                        <a href="#">Example Code Snippet</a>
+                        <span>2 min ago | Java</span>
+                    </div>
+                </li>
+            </ul>
+        </aside>
+    </div>
+</main>
 
 <script th:src="@{/js/home_script.js}"></script>
 </body>
