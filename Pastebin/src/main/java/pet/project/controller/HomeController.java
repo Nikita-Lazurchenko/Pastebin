@@ -4,10 +4,11 @@ package pet.project.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import pet.project.database.entity.Expiration;
 import pet.project.dto.PasteDto;
-import pet.project.entity.Access;
-import pet.project.entity.Category;
-import pet.project.entity.PasswordProtect;
+import pet.project.database.entity.Access;
+import pet.project.database.entity.Category;
+import pet.project.database.entity.PasswordProtect;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +22,9 @@ public class HomeController {
 
         List<String> category  = Arrays.stream(Category.values()).map(e -> e.getDisplayName()).collect(Collectors.toList());
         model.addAttribute("Category", category);
+
+        List<String> expiration = Arrays.stream(Expiration.values()).map(e -> e.getDescription()).collect(Collectors.toList());
+        model.addAttribute("Expiration", expiration);
 
         List<String> access  = Arrays.stream(Access.values()).map(e -> e.getDisplayName()).collect(Collectors.toList());
         model.addAttribute("Access", access);

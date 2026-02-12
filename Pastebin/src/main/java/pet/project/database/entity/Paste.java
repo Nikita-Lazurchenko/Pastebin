@@ -1,27 +1,27 @@
-package pet.project.entity;
-
+package pet.project.database.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
+@ToString(exclude = {"user"})
+@EqualsAndHashCode(of="pasteLink")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(schema = "pastebin", name = "pastes")
-public class Paste {
+public class Paste implements BaseEntity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "paste_link", nullable = false, unique = true)
+    private String pasteLink;
 
     @Enumerated(EnumType.STRING)
     private Category category;
@@ -36,8 +36,16 @@ public class Paste {
     @Enumerated(EnumType.STRING)
     private Access access;
 
-    @Enumerated(EnumType.STRING)
-    private PasswordProtect passwordProtect;
+    private String password;
 
     private String title;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    public void setUser(User user){
+        this.user = user;
+        user.getPastes().add(this);
+    }
 }

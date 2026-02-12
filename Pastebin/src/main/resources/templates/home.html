@@ -61,12 +61,12 @@
                             <input type="text" name="tags" placeholder="tag1, tag2" th:value="*{tag}">
                         </div>
                         <div class="setting-item">
-                            <label>Expiration</label>
-                            <select name="expiration" th:value="*{expiration}">
-                                <option>Never</option>
-                                <option>10 Minutes</option>
-                                <option>1 Hour</option>
-                                <option>1 Day</option>
+                            <label for="expiration">Expiration</label>
+                            <select id="expiration" th:field="*{expiration}">
+                                <option th:each="exp: ${Expiration}"
+                                        th:value="${exp}"
+                                        th:text="${exp}">
+                                </option>
                             </select>
                         </div>
                         <div class="setting-item">

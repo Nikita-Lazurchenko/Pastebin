@@ -2,7 +2,6 @@ package pet.project.dto;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 
 @Data
 @Component

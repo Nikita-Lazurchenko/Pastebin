@@ -1,4 +1,4 @@
-package pet.project.entity;
+package pet.project.database.entity;
 
 public interface DisplayEnum {
     String name();
