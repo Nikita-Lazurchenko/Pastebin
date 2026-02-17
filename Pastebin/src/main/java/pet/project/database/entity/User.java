@@ -18,10 +18,13 @@ public class User implements BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, nullable = false)
-    private String email;
+
     private String firstname;
     private String lastname;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;

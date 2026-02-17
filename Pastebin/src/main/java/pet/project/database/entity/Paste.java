@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+import org.springframework.stereotype.Component;
+
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -13,6 +15,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Component
 @Entity
 @Table(schema = "pastebin", name = "pastes")
 public class Paste implements BaseEntity<Long>{

@@ -10,3 +10,6 @@ spring:
     properties.hibernate:
       show_sql: true
       format_sql: true
+  storage:
+    folder-id: 16HtRVAC-5aU2-RUu15XrNH7fc_wyrbSS
+    main-path: https://drive.google.com/uc?export=view&id=

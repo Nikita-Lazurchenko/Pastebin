@@ -9,14 +9,16 @@ import pet.project.database.repository.PasteRepository;
 import pet.project.database.repository.UserRepository;
 import pet.project.dto.PasteDto;
 import pet.project.mapper.PasteCreateMapper;
+import pet.project.storage.GoogleDrive;
 
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class PasteService {
     private final PasteRepository pasteRepository;
     private final UserRepository userRepository;
     private final PasteCreateMapper pasteCreateMapper;
+    private final GoogleDrive googleDrive;
 
     @Transactional
     public Paste save(PasteDto pasteDto, Long userId) {
@@ -25,6 +27,9 @@ public class PasteService {
 
         Paste paste = pasteCreateMapper.mapFrom(pasteDto);
         paste.setUser(user);
+
+        String path = googleDrive.uploadFileToDrive(pasteDto.getPaste());
+        paste.setPasteLink(path);
 
         return pasteRepository.save(paste);
     }

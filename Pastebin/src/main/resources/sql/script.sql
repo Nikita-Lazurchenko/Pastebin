@@ -18,4 +18,7 @@ CREATE TABLE IF NOT EXISTS pastes(
     password VARCHAR(50) NOT NULL,
     title VARCHAR(128) NOT NULL,
     user_id BIGINT NOT NULL REFERENCES users(id)
-)
+);
+
+insert into users(id, firstname, lastname, email, password, role)
+values (1, 'No', 'Name','email@gmail.com', 787898, USER)

@@ -14,6 +14,7 @@ public class PasteRepository {
     @Transactional
     public Paste save(Paste paste) {
         if (paste.getId() == null) {
+            System.out.println(paste);
             entityManager.persist(paste);
             return paste;
         } else {

@@ -1,5 +1,6 @@
 package pet.project.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 

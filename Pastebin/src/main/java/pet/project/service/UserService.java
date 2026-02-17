@@ -8,13 +8,14 @@ import pet.project.database.entity.User;
 import pet.project.database.repository.UserRepository;
 import pet.project.dto.UserDto;
 
-@RequiredArgsConstructor
+
 @Service
+@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public User save(UserDto userDto, Long userId) {
+    public User save(UserDto userDto) {
         User user = User.builder()
                 .firstname(userDto.getFirstname())
                 .lastname(userDto.getLastname())

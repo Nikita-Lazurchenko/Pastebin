@@ -43,13 +43,13 @@
         <section class="paste-creation">
             <h2 class="section-title">New Paste</h2>
             <form th:action="@{/}" method="post" th:object="${pasteCreation}">
-                <textarea class="paste-area" name="content" placeholder="Enter your text here..." th:value="*{paste}"></textarea>
+                <textarea class="paste-area" name="content" placeholder="Enter your text here..." th:field="*{paste}"></textarea>
 
                 <div class="paste-settings">
                     <div class="settings-grid">
                         <div class="setting-item">
-                            <label for="access">Category</label>
-                            <select id="category"  th:field="*{category}">
+                            <label>Category</label>
+                            <select th:field="*{category}">
                                 <option th:each="ctgr: ${Category}"
                                         th:value="${ctgr}"
                                         th:text="${ctgr}">
@@ -58,7 +58,7 @@
                         </div>
                         <div class="setting-item">
                             <label>Tags</label>
-                            <input type="text" name="tags" placeholder="tag1, tag2" th:value="*{tag}">
+                            <input type="text" name="tags" placeholder="tag1, tag2" th:field="*{tag}" th:value="${tag}">
                         </div>
                         <div class="setting-item">
                             <label for="expiration">Expiration</label>
@@ -85,6 +85,7 @@
                                     <input th:id="${hasPassOrNo}"
                                            type="radio"
                                            name="radio"
+                                           th:field="*{hasPassOrNo}"
                                            th:value="${hasPassOrNo}"
                                            th:checked="${hasPassOrNo == pasteCreation.hasPassOrNo}">
                                     <label th:for="${hasPassOrNo}" th:text="${hasPassOrNo}" style="margin-bottom: 0;">hasPassOrNo</label>
@@ -93,13 +94,13 @@
                         </div>
                         <div class="setting-item">
                             <label>Password</label>
-                            <input type="password" name="password" placeholder="Optional" th:value="${password}">
+                            <input type="password" name="password" placeholder="Optional" th:field="*{password}" th:value="${password}">
                         </div>
                     </div>
 
                     <div class="submit-section">
-                        <input type="text" class="paste-name" name="title" placeholder="Paste Name / Title" th:value="${pasteName}">
-                        <button type="submit" class="btn-publish">Create New Paste</button>
+                        <input type="text" class="paste-name" name="title" placeholder="Paste Name / Title" th:field="*{title}" th:value="${title}">
+                        <button id="button" type="submit" class="btn-publish">Create New Paste</button>
                     </div>
                 </div>
             </form>
