@@ -14,12 +14,18 @@ public class PasteRepository {
     @Transactional
     public Paste save(Paste paste) {
         if (paste.getId() == null) {
-            System.out.println(paste);
             entityManager.persist(paste);
             return paste;
         } else {
             return entityManager.merge(paste);
         }
+    }
+
+    public Paste findByHash(String hash) {
+        return entityManager.createQuery(
+                        "SELECT p FROM Paste p WHERE p.pasteLink = :hash", Paste.class)
+                .setParameter("hash", hash)
+                .getSingleResult();
     }
 
 }

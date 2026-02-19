@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.Optional;
 
 
 @Service
@@ -18,11 +20,8 @@ public class GoogleDrive{
     private final Drive drive;
     @Value("${spring.storage.folder-id}")
     private String folderId;
-    @Value("${spring.storage.main-path}")
-    private String mainPath;
 
-    public String uploadFileToDrive(String textContent) {
-        System.out.println(folderId);
+    public Optional<PasteFile> uploadFileToDrive(String textContent) {
         String fileName = generatorHash.getHash();
 
         try {
@@ -41,15 +40,25 @@ public class GoogleDrive{
                     .execute();
 
             String fileId = uploadedFile.getId();
-            String fileUrl = mainPath + fileId;
 
-            System.out.println("FILE URL: " + fileUrl);
-
-            return fileName;
+            return Optional.of(new PasteFile(fileName, fileId));
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return null;
+            return Optional.empty();
+        }
+    }
+
+    public Optional<String> downloadFileFromDrive(String fileId) {
+        try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            drive.files().get(fileId)
+                    .setSupportsAllDrives(true)
+                    .executeMediaAndDownloadTo(outputStream);
+
+            return Optional.of(new String(outputStream.toByteArray(), StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            System.out.println("Ошибка при скачивании: " + e.getMessage());
+            return Optional.empty();
         }
     }
 }

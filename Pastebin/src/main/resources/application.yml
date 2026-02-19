@@ -1,15 +1,19 @@
 spring:
   application:
-     name: Pastebin
+    name: Pastebin
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: 787898
     driver-class-name: org.postgresql.Driver
   jpa:
-    properties.hibernate:
-      show_sql: true
-      format_sql: true
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  servlet:
+    session:
+      tracking-modes: cookie
   storage:
     folder-id: 16HtRVAC-5aU2-RUu15XrNH7fc_wyrbSS
     main-path: https://drive.google.com/uc?export=view&id=

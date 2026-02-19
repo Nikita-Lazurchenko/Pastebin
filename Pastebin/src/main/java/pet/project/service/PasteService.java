@@ -7,9 +7,14 @@ import pet.project.database.entity.Paste;
 import pet.project.database.entity.User;
 import pet.project.database.repository.PasteRepository;
 import pet.project.database.repository.UserRepository;
-import pet.project.dto.PasteDto;
+import pet.project.dto.PasteCreateDto;
+import pet.project.dto.PasteViewDto;
 import pet.project.mapper.PasteCreateMapper;
+import pet.project.mapper.PasteViewMapper;
 import pet.project.storage.GoogleDrive;
+import pet.project.storage.PasteFile;
+
+import java.util.Optional;
 
 
 @Service
@@ -18,19 +23,30 @@ public class PasteService {
     private final PasteRepository pasteRepository;
     private final UserRepository userRepository;
     private final PasteCreateMapper pasteCreateMapper;
+    private final PasteViewMapper pasteViewMapper;
     private final GoogleDrive googleDrive;
 
     @Transactional
-    public Paste save(PasteDto pasteDto, Long userId) {
+    public Paste save(PasteCreateDto pasteCreateDto, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Paste paste = pasteCreateMapper.mapFrom(pasteDto);
+        Paste paste = pasteCreateMapper.mapFrom(pasteCreateDto);
         paste.setUser(user);
 
-        String path = googleDrive.uploadFileToDrive(pasteDto.getPaste());
-        paste.setPasteLink(path);
+        Optional<PasteFile> pasteFile = googleDrive.uploadFileToDrive(pasteCreateDto.getPaste());
+        paste.setPasteLink(pasteFile.get().pasteId());
+        paste.setGoogleFileId(pasteFile.get().FileId());
 
         return pasteRepository.save(paste);
+    }
+
+    public PasteViewDto findByHash(String hash) {
+        Paste paste = pasteRepository.findByHash(hash);
+
+        PasteViewDto pasteViewDto = pasteViewMapper.mapFrom(paste);
+        pasteViewDto.setPaste(googleDrive.downloadFileFromDrive(paste.getGoogleFileId()).get());
+
+        return pasteViewDto;
     }
 }

@@ -26,6 +26,9 @@ public class Paste implements BaseEntity<Long>{
     @Column(name = "paste_link", nullable = false, unique = true)
     private String pasteLink;
 
+    @Column(name = "google_file_url", nullable = false, unique = true)
+    private String googleFileId;
+
     @Enumerated(EnumType.STRING)
     private Category category;
 

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pastebin</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home_nav.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home_body.css}">
+    <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-bar">
+        <i class="bx bx-menu sidebarOpen"></i>
+        <span class="logo navLogo"><a href="#">Pastebin</a></span>
+
+        <div class="menu">
+            <div class="logo-toggle">
+                <span class="logo"><a href="#">Pastebin</a></span>
+                <i class='bx bx-x siderbarClose'></i>
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Publications</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Developer Portfolio</a></li>
+                <li><a href="#">Git Hub</a></li>
+            </ul>
+        </div>
+
+        <div class="darkLight">
+            <div class="dark-light">
+                <i class='bx bx-moon moon'></i>
+                <i class='bx bx-sun sun'></i>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main class="container">
+    <div class="main-content" style="display: grid; grid-template-columns: 1fr 300px; gap: 30px;">
+
+        <section class="paste-view">
+            <!-- Шапка пасты -->
+            <header class="paste-header" style="margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2 class="section-title" th:text="${title}" style="margin: 0;">Заголовок</h2>
+                    <div class="paste-actions" style="display: flex; gap: 10px;">
+                        <button class="btn-sm"><i class='bx bx-copy'></i> Copy</button>
+                        <button class="btn-sm"><i class='bx bx-code-alt'></i> Raw</button>
+                    </div>
+                </div>
+                <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 5px;">
+                    <i class='bx bx-calendar'></i> <span th:text="${createdAtRelative}">15 мин назад</span>
+                    <span style="margin-left: 10px;"><i class='bx bx-show'></i> 124 views</span>
+                </div>
+            </header>
+
+            <div class="code-wrapper" style="position: relative; border-radius: 8px; overflow: hidden; border: 1px solid #ddd;">
+                <textarea class="paste-area" readonly
+                          style="width: 100%; min-height: 400px; font-family: 'Fira Code', monospace; padding: 15px; border: none; resize: none; background: #f8f9fa;"
+                          th:text="${text}">...</textarea>
+            </div>
+
+            <div class="paste-footer-meta" style="margin-top: 20px; padding: 15px; background: var(--bg-soft); border-radius: 8px;">
+                <div class="settings-grid" style="display: flex; gap: 40px;">
+                    <div class="meta-block">
+                        <small style="display: block; color: gray;">Language</small>
+                        <strong th:text="${category}">Java</strong>
+                    </div>
+                    <div class="meta-block">
+                        <small style="display: block; color: gray;">Tags</small>
+                        <strong th:text="${tags}">Tags</strong>
+                    </div>
+                    <div class="meta-block">
+                        <small style="display: block; color: gray;">Expiration</small>
+                        <strong th:text="${deletedAt}">Never</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <aside class="sidebar-wrapper" style="display: flex; flex-direction: column; gap: 20px;">
+
+            <div class="recent-pastes">
+                <h3 class="section-title">Author's Pastes</h3>
+                <ul class="pastes-list">
+                    <li class="paste-item">
+                        <i class='bx bx-user'></i>
+                        <div class="paste-info">
+                            <a href="#">Other Code from Author</a>
+                            <span>1 hour ago | Python</span>
+                        </div>
+                    </li>
+                    <li class="paste-item">
+                        <i class='bx bx-user'></i>
+                        <div class="paste-info">
+                            <a href="#">My Secret Config</a>
+                            <span>2 days ago | Config</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="recent-pastes">
+                <h3 class="section-title">Public Pastes</h3>
+                <ul class="pastes-list">
+                    <li class="paste-item">
+                        <i class='bx bx-globe'></i>
+                        <div class="paste-info">
+                            <a href="#">Global Snippet #123</a>
+                            <span>1 min ago | JavaScript</span>
+                        </div>
+                    </li>
+                    <li class="paste-item">
+                        <i class='bx bx-globe'></i>
+                        <div class="paste-info">
+                            <a href="#">How to center a div</a>
+                            <span>5 min ago | CSS</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </aside>
+    </div>
+</main>
+</body>
+
+<script th:src="@{/js/home_script.js}"></script>
+</html>

@@ -12,7 +12,7 @@ import pet.project.database.entity.Role;
 import pet.project.database.entity.User;
 import pet.project.database.repository.PasteRepository;
 import pet.project.database.repository.UserRepository;
-import pet.project.dto.PasteDto;
+import pet.project.dto.PasteCreateDto;
 import pet.project.mapper.PasteCreateMapper;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -25,7 +25,7 @@ public class PasteServiceTestIT {
     private final PasteRepository pasteRepository;
     private final PasteCreateMapper pasteCreateMapper;
     private final UserRepository userRepository;
-    private final PasteDto pasteDto;
+    private final PasteCreateDto pasteCreateDto;
 
     @Test
     public void checkPasteSave(){
@@ -39,15 +39,15 @@ public class PasteServiceTestIT {
 
         userRepository.save(user);
 
-        pasteDto.setPaste("text");
-        pasteDto.setCategory("Code");
-        pasteDto.setTag("#java #spring");
-        pasteDto.setExpiration("10 Minutes");
-        pasteDto.setAccess("public");
-        pasteDto.setPassword("secret");
-        pasteDto.setTitle("My Paste");
+        pasteCreateDto.setPaste("text");
+        pasteCreateDto.setCategory("Code");
+        pasteCreateDto.setTag("#java #spring");
+        pasteCreateDto.setExpiration("10 Minutes");
+        pasteCreateDto.setAccess("public");
+        pasteCreateDto.setPassword("secret");
+        pasteCreateDto.setTitle("My Paste");
 
-        Paste paste = pasteCreateMapper.mapFrom(pasteDto);
+        Paste paste = pasteCreateMapper.mapFrom(pasteCreateDto);
         paste.setUser(user);
 
         Paste savedPaste = pasteRepository.save(paste);

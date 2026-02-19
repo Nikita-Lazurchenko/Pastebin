@@ -1,12 +1,9 @@
 package pet.project.dto;
 
-import lombok.Builder;
 import lombok.Data;
-import org.springframework.stereotype.Component;
 
 @Data
-@Component
-public class PasteDto {
+public class PasteCreateDto {
     private String paste;
     private String category;
     private String tag;

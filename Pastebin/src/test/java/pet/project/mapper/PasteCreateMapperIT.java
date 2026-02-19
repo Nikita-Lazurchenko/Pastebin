@@ -8,7 +8,7 @@ import pet.project.PastebinApplication;
 import pet.project.database.entity.Access;
 import pet.project.database.entity.Category;
 import pet.project.database.entity.Paste;
-import pet.project.dto.PasteDto;
+import pet.project.dto.PasteCreateDto;
 import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,20 +16,20 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(classes = PastebinApplication.class)
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 public class PasteCreateMapperIT {
-    private final PasteDto pasteDto;
+    private final PasteCreateDto pasteCreateDto;
     private final PasteCreateMapper pasteCreateMapper;
 
     @Test
     public void checkMapFrom() {
-        pasteDto.setPaste("text");
-        pasteDto.setCategory("Code");
-        pasteDto.setTag("#java #spring");
-        pasteDto.setExpiration("10 Minutes");
-        pasteDto.setAccess("public");
-        pasteDto.setPassword("secret");
-        pasteDto.setTitle("My Paste");
+        pasteCreateDto.setPaste("text");
+        pasteCreateDto.setCategory("Code");
+        pasteCreateDto.setTag("#java #spring");
+        pasteCreateDto.setExpiration("10 Minutes");
+        pasteCreateDto.setAccess("public");
+        pasteCreateDto.setPassword("secret");
+        pasteCreateDto.setTitle("My Paste");
 
-        Paste paste = pasteCreateMapper.mapFrom(pasteDto);
+        Paste paste = pasteCreateMapper.mapFrom(pasteCreateDto);
 
         System.out.println(paste);
 
