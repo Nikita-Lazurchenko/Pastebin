@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS users(
 CREATE TABLE IF NOT EXISTS pastes(
     id BIGSERIAL PRIMARY KEY,
     paste_link VARCHAR(50) NOT NULL UNIQUE,
-    google_file_url VARCHAR(128) NOT NULL UNIQUE,
+    google_file_id VARCHAR(128) NOT NULL UNIQUE,
     category VARCHAR(50) NOT NULL,
     tags TEXT[],
     created_at TIMESTAMP NOT NULL,

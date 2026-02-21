@@ -14,7 +14,6 @@ import java.util.Optional;
 public class UserRepository {
     private final EntityManager entityManager;
 
-    @Transactional
     public User save(User user) {
         if (user.getId() == null) {
             entityManager.persist(user);

@@ -41,7 +41,7 @@ public class GeneratorHash {
 
         return Base64.getUrlEncoder().withoutPadding()
                 .encodeToString(bb.array())
-                .substring(0, 10);
+                .substring(0, 15);
     }
 
 }

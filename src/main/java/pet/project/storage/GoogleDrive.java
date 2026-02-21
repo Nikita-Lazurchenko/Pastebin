@@ -4,6 +4,7 @@ import com.google.api.client.http.InputStreamContent;
 import com.google.api.services.drive.Drive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
@@ -59,6 +60,17 @@ public class GoogleDrive{
         } catch (Exception e) {
             System.out.println("Ошибка при скачивании: " + e.getMessage());
             return Optional.empty();
+        }
+    }
+
+    @Async
+    public void deleteFileFromDrive(String fileId) {
+        try {
+            drive.files().delete(fileId)
+                    .setSupportsAllDrives(true)
+                    .execute();
+        } catch (Exception e) {
+            System.out.println("Ошибка при удалении файла с ID " + fileId + ": " + e.getMessage());
         }
     }
 }

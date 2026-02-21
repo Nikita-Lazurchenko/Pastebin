@@ -2,8 +2,11 @@ package pet.project;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import pet.project.service.PasteService;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
+@EnableScheduling
+@EnableAsync
 @SpringBootApplication
 public class PastebinApplication {
 

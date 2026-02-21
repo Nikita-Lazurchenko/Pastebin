@@ -17,15 +17,14 @@
         <div class="menu">
             <div class="logo-toggle">
                 <span class="logo"><a href="#">Pastebin</a></span>
-                <i class='bx bx-x siderbarClose'></i>
+                <i class='bx bx-x sidebarClose'></i>
             </div>
-
             <ul class="nav-links">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Publications</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Developer Portfolio</a></li>
-                <li><a href="#">Git Hub</a></li>
+                <li><a href="#">Главная</a></li>
+                <li><a href="#">Публикации</a></li>
+                <li><a href="#">О нас</a></li>
+                <li><a href="#">Портфолио</a></li>
+                <li><a href="#">GitHub</a></li>
             </ul>
         </div>
 
@@ -41,86 +40,84 @@
 <main class="container">
     <div class="main-content">
         <section class="paste-creation">
-            <h2 class="section-title">New Paste</h2>
+            <h2 class="section-title">Новая запись</h2>
             <form th:action="@{/}" method="post" th:object="${pasteCreation}">
-                <textarea class="paste-area" name="content" placeholder="Enter your text here..." th:field="*{paste}"></textarea>
+                <!-- Основное поле текста -->
+                <textarea class="paste-area"
+                          placeholder="Введите ваш текст или код здесь..."
+                          th:field="*{paste}"></textarea>
 
                 <div class="paste-settings">
                     <div class="settings-grid">
                         <div class="setting-item">
-                            <label>Category</label>
+                            <label>Категория</label>
                             <select th:field="*{category}">
-                                <option th:each="ctgr: ${Category}"
+                                <option th:each="ctgr : ${Category}"
                                         th:value="${ctgr}"
-                                        th:text="${ctgr}">
-                                </option>
+                                        th:text="${ctgr}"></option>
                             </select>
                         </div>
                         <div class="setting-item">
-                            <label>Tags</label>
-                            <input type="text" name="tags" placeholder="tag1, tag2" th:field="*{tag}" th:value="${tag}">
+                            <label>Теги</label>
+                            <input type="text" placeholder="java, spring, help" th:field="*{tag}">
                         </div>
                         <div class="setting-item">
-                            <label for="expiration">Expiration</label>
+                            <label for="expiration">Срок хранения</label>
                             <select id="expiration" th:field="*{expiration}">
-                                <option th:each="exp: ${Expiration}"
+                                <option th:each="exp : ${Expiration}"
                                         th:value="${exp}"
-                                        th:text="${exp}">
-                                </option>
+                                        th:text="${exp}"></option>
                             </select>
                         </div>
                         <div class="setting-item">
-                            <label for="access">Access</label>
+                            <label for="access">Доступ</label>
                             <select id="access" th:field="*{access}">
                                 <option th:each="acc : ${Access}"
                                         th:value="${acc}"
-                                        th:text="${acc}">
-                                </option>
+                                        th:text="${acc}"></option>
                             </select>
                         </div>
                         <div class="setting-item">
-                            <label>Password Protect?</label>
+                            <label>Защита паролем</label>
                             <div class="radio-group">
-                                <div th:each="hasPassOrNo : ${PasswordProtect}" style="display: flex; align-items: center; gap: 5px;">
-                                    <input th:id="${hasPassOrNo}"
-                                           type="radio"
-                                           name="radio"
-                                           th:field="*{hasPassOrNo}"
-                                           th:value="${hasPassOrNo}"
-                                           th:checked="${hasPassOrNo == pasteCreation.hasPassOrNo}">
-                                    <label th:for="${hasPassOrNo}" th:text="${hasPassOrNo}" style="margin-bottom: 0;">hasPassOrNo</label>
+                                <div th:each="option, stat : ${PasswordProtect}" class="radio-item">
+                                    <!-- Используем индекс stat для уникальных ID -->
+                                    <input type="radio"
+                                           th:id="${'pass' + stat.index}"
+                                           th:value="${option}"
+                                           th:field="*{hasPassOrNo}">
+                                    <label th:for="${'pass' + stat.index}" th:text="${option}"></label>
                                 </div>
                             </div>
                         </div>
                         <div class="setting-item">
-                            <label>Password</label>
-                            <input type="password" name="password" placeholder="Optional" th:field="*{password}" th:value="${password}">
+                            <label>Пароль</label>
+                            <input type="password" placeholder="Опционально" th:field="*{password}">
                         </div>
                     </div>
 
                     <div class="submit-section">
-                        <input type="text" class="paste-name" name="title" placeholder="Paste Name / Title" th:field="*{title}" th:value="${title}">
-                        <button id="button" type="submit" class="btn-publish">Create New Paste</button>
+                        <input type="text" class="paste-name" placeholder="Название записи" th:field="*{title}">
+                        <button type="submit" class="btn-publish">Опубликовать</button>
                     </div>
                 </div>
             </form>
         </section>
 
         <aside class="recent-pastes">
-            <h3 class="section-title">Public Pastes</h3>
+            <h3 class="section-title">Недавние записи</h3>
             <ul class="pastes-list">
                 <li class="paste-item">
                     <i class='bx bx-file'></i>
                     <div class="paste-info">
-                        <a href="#">Example Code Snippet</a>
-                        <span>2 min ago | Java</span>
+                        <a href="#">Пример кода Java</a>
+                        <span>2 мин. назад | Java</span>
                     </div>
                 </li>
             </ul>
         </aside>
     </div>
 </main>
-
 <script th:src="@{/js/home_script.js}"></script>
 </body>
 </html>

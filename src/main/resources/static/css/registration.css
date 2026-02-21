@@ -1,0 +1,130 @@
+/* Переменные проекта */
+:root {
+    --bg-color: #f0f2f5;
+    --card-bg: #ffffff;
+    --primary-color: #0077ff; /* Фирменный синий VK */
+    --primary-hover: #0066dd;
+    --text-main: #2c2d2e;
+    --text-muted: #818c99;
+    --border-color: #dce1e6;
+    --input-bg: #f2f3f5;
+}
+
+/* Базовые стили страницы */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, system-ui, Helvetica Neue, Roboto, sans-serif;
+    background-color: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    padding: 20px;
+}
+
+/* Карточка регистрации */
+.auth-card {
+    background: var(--card-bg);
+    padding: 32px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    max-width: 400px;
+    margin: 0 auto;
+    color: var(--text-main);
+}
+
+.section-title {
+    margin: 0 0 24px 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Сетка полей ввода */
+.settings-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.setting-item label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.setting-item input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--input-bg);
+    color: var(--text-main);
+    box-sizing: border-box; /* Чтобы padding не раздувал ширину */
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+}
+
+.setting-item input:focus {
+    border-color: var(--primary-color);
+    background-color: #fff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 119, 255, 0.1);
+}
+
+/* Секция отправки */
+.submit-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Кнопка */
+.btn-publish {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-publish:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-publish:active {
+    transform: translateY(1px);
+}
+
+/* Футер формы */
+.auth-footer {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin: 0;
+}
+
+.auth-footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}

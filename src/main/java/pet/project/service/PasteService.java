@@ -2,6 +2,7 @@ package pet.project.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pet.project.database.entity.Paste;
 import pet.project.database.entity.User;
@@ -14,6 +15,7 @@ import pet.project.mapper.PasteViewMapper;
 import pet.project.storage.GoogleDrive;
 import pet.project.storage.PasteFile;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -35,7 +37,7 @@ public class PasteService {
         paste.setUser(user);
 
         Optional<PasteFile> pasteFile = googleDrive.uploadFileToDrive(pasteCreateDto.getPaste());
-        paste.setPasteLink(pasteFile.get().pasteId());
+        paste.setPasteLink(pasteFile.orElseThrow().pasteId());
         paste.setGoogleFileId(pasteFile.get().FileId());
 
         return pasteRepository.save(paste);
@@ -45,8 +47,19 @@ public class PasteService {
         Paste paste = pasteRepository.findByHash(hash);
 
         PasteViewDto pasteViewDto = pasteViewMapper.mapFrom(paste);
-        pasteViewDto.setPaste(googleDrive.downloadFileFromDrive(paste.getGoogleFileId()).get());
+        pasteViewDto.setPaste(googleDrive.downloadFileFromDrive(paste.getGoogleFileId()).orElseThrow());
 
         return pasteViewDto;
+    }
+
+    @Scheduled(fixedDelay = 60 * 1000)
+    public void deletedAllExpiredPastes(){
+        List<String> googleDriveFileIds = pasteRepository.deleteAllExpiredPastesAndReturnFileId();
+
+        if(!googleDriveFileIds.isEmpty()){
+            googleDriveFileIds.forEach(googleDrive::deleteFileFromDrive);
+        }
+
+        System.out.println("Произошла очистка Pastes");
     }
 }
