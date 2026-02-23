@@ -18,7 +18,7 @@ public class PasteViewMapper implements Mapper<PasteViewDto, Paste>{
         return PasteViewDto.builder()
                 .category(paste.getCategory().getDisplayName())
                 .tag(String.join(", ",paste.getTags()))
-                .deletedAt(paste.getDeletedAt().format(formatter))
+                .expiration(paste.getExpiration().getDescription())
                 .createdAtRelative(prettyTime.format(paste.getCreatedAt()))
                 .title(paste.getTitle())
                 .build();

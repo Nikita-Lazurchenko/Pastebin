@@ -23,7 +23,16 @@ public class UserRepository {
         }
     }
 
-    public Optional<User> findById(Long id){
+    public Optional<User> findById(Long id)
+    {
         return Optional.ofNullable(entityManager.find(User.class, id));
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<User> loadUserByEmail(String email){
+        return entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+                .setParameter("email",email)
+                .getResultStream()
+                .findFirst();
     }
 }

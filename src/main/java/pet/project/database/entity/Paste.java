@@ -26,7 +26,7 @@ public class Paste implements BaseEntity<Long>{
     @Column(name = "paste_link", nullable = false, unique = true)
     private String pasteLink;
 
-    @Column(name = "google_file_url", nullable = false, unique = true)
+    @Column(name = "google_file_id", nullable = false, unique = true)
     private String googleFileId;
 
     @Enumerated(EnumType.STRING)
@@ -36,6 +36,7 @@ public class Paste implements BaseEntity<Long>{
     @Column(name = "tags", columnDefinition = "text[]")
     private Set<String> tags;
 
+    private Expiration expiration;
     private LocalDateTime createdAt;
     private LocalDateTime deletedAt;
 

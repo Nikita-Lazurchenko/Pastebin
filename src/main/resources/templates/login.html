@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign In</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/registration.css}">
+</head>
+<body>
+<div class="container">
+    <div class="auth-card">
+        <h2 class="section-title">Sign In</h2>
+        <form th:action="@{/login}" method="post" th:object="${user}">
+            <div class="settings-grid">
+                <div class="setting-item">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="username" placeholder="example@mail.com" th:field="*{email}" required>
+                    <span class="error-msg" id="emailError" style="color: #ff4d4d; font-size: 0.75rem; margin-top: 4px; display: block;"></span>
+                </div>
+                <div class="setting-item">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" th:field="*{password}" required>
+                    <p class="auth-footer" style="text-align: right; margin-top: 5px;">
+                        <a href="#" style="font-size: 0.8rem;">Forgot password?</a>
+                    </p>
+                    <span class="error-msg" id="passwordError" style="color: #ff4d4d; font-size: 0.75rem; margin-top: 4px; display: block;"></span>
+                </div>
+            </div>
+
+            <div class="submit-section">
+                <button type="submit" class="btn-publish">Login</button>
+                <p class="auth-footer">New here? <a th:href="@{/registration}">Create an account</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script th:src="@{/js/validation.js}"></script>
+</html>

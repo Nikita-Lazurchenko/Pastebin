@@ -20,11 +20,11 @@
                 <i class='bx bx-x sidebarClose'></i>
             </div>
             <ul class="nav-links">
-                <li><a href="#">Главная</a></li>
-                <li><a href="#">Публикации</a></li>
-                <li><a href="#">О нас</a></li>
-                <li><a href="#">Портфолио</a></li>
-                <li><a href="#">GitHub</a></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="#">Publications</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Developer portfolio</a></li>
+                <li><a href="https://github.com/Nikita-Lazurchenko">GitHub</a></li>
             </ul>
         </div>
 
@@ -40,9 +40,8 @@
 <main class="container">
     <div class="main-content">
         <section class="paste-creation">
-            <h2 class="section-title">Новая запись</h2>
+            <h2 class="section-title">New paste</h2>
             <form th:action="@{/}" method="post" th:object="${pasteCreation}">
-                <!-- Основное поле текста -->
                 <textarea class="paste-area"
                           placeholder="Введите ваш текст или код здесь..."
                           th:field="*{paste}"></textarea>
@@ -50,38 +49,37 @@
                 <div class="paste-settings">
                     <div class="settings-grid">
                         <div class="setting-item">
-                            <label>Категория</label>
+                            <label>Category</label>
                             <select th:field="*{category}">
-                                <option th:each="ctgr : ${Category}"
+                                <option th:each="ctgr : ${category}"
                                         th:value="${ctgr}"
                                         th:text="${ctgr}"></option>
                             </select>
                         </div>
                         <div class="setting-item">
-                            <label>Теги</label>
-                            <input type="text" placeholder="java, spring, help" th:field="*{tag}">
+                            <label>Tags</label>
+                            <input type="text" placeholder="#java_ee #spring_boot #web" th:field="*{tag}">
                         </div>
                         <div class="setting-item">
-                            <label for="expiration">Срок хранения</label>
+                            <label for="expiration">Expiration</label>
                             <select id="expiration" th:field="*{expiration}">
-                                <option th:each="exp : ${Expiration}"
+                                <option th:each="exp : ${expiration}"
                                         th:value="${exp}"
                                         th:text="${exp}"></option>
                             </select>
                         </div>
                         <div class="setting-item">
-                            <label for="access">Доступ</label>
+                            <label for="access">Access</label>
                             <select id="access" th:field="*{access}">
-                                <option th:each="acc : ${Access}"
+                                <option th:each="acc : ${access}"
                                         th:value="${acc}"
                                         th:text="${acc}"></option>
                             </select>
                         </div>
                         <div class="setting-item">
-                            <label>Защита паролем</label>
+                            <label>Password protection ?</label>
                             <div class="radio-group">
-                                <div th:each="option, stat : ${PasswordProtect}" class="radio-item">
-                                    <!-- Используем индекс stat для уникальных ID -->
+                                <div th:each="option, stat : ${passwordProtect}" class="radio-item">
                                     <input type="radio"
                                            th:id="${'pass' + stat.index}"
                                            th:value="${option}"
@@ -91,27 +89,27 @@
                             </div>
                         </div>
                         <div class="setting-item">
-                            <label>Пароль</label>
-                            <input type="password" placeholder="Опционально" th:field="*{password}">
+                            <label>Password</label>
+                            <input type="password" placeholder="Option" th:field="*{password}">
                         </div>
                     </div>
 
                     <div class="submit-section">
-                        <input type="text" class="paste-name" placeholder="Название записи" th:field="*{title}">
-                        <button type="submit" class="btn-publish">Опубликовать</button>
+                        <input type="text" class="paste-name" placeholder="Title" th:field="*{title}">
+                        <button type="submit" class="btn-publish">Create</button>
                     </div>
                 </div>
             </form>
         </section>
 
         <aside class="recent-pastes">
-            <h3 class="section-title">Недавние записи</h3>
+            <h3 class="section-title">Recent Posts</h3>
             <ul class="pastes-list">
                 <li class="paste-item">
                     <i class='bx bx-file'></i>
                     <div class="paste-info">
-                        <a href="#">Пример кода Java</a>
-                        <span>2 мин. назад | Java</span>
+                        <a href="#">Example Java code</a>
+                        <span>2 min. ago | Java</span>
                     </div>
                 </li>
             </ul>

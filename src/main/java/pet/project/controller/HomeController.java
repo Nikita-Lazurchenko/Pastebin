@@ -26,16 +26,16 @@ public class HomeController {
         model.addAttribute("pasteCreation", new PasteCreateDto());
 
         List<String> category  = Arrays.stream(Category.values()).map(DisplayEnum::getDisplayName).collect(Collectors.toList());
-        model.addAttribute("Category", category);
+        model.addAttribute("category", category);
 
         List<String> expiration = Arrays.stream(Expiration.values()).map(Expiration::getDescription).collect(Collectors.toList());
-        model.addAttribute("Expiration", expiration);
+        model.addAttribute("expiration", expiration);
 
         List<String> access  = Arrays.stream(Access.values()).map(DisplayEnum::getDisplayName).collect(Collectors.toList());
-        model.addAttribute("Access", access);
+        model.addAttribute("access", access);
 
         List<String> hasPasswordOrNo = Arrays.stream(PasswordProtect.values()).map(DisplayEnum::getDisplayName).collect(Collectors.toList());
-        model.addAttribute("PasswordProtect", hasPasswordOrNo);
+        model.addAttribute("passwordProtect", hasPasswordOrNo);
 
         return "home";
     }
@@ -78,7 +78,7 @@ public class HomeController {
         model.addAttribute("text", pasteViewDto.getPaste());
         model.addAttribute("category", pasteViewDto.getCategory());
         model.addAttribute("tags", pasteViewDto.getTag());
-        model.addAttribute("deletedAt",pasteViewDto.getDeletedAt());
+        model.addAttribute("expiration",pasteViewDto.getExpiration());
 
         return "show_paste";
     }

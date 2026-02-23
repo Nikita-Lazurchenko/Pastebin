@@ -19,6 +19,7 @@ public class PasteCreateMapper implements Mapper<Paste, PasteCreateDto> {
         return Paste.builder()
                 .category(Category.valueOf(pasteCreateDto.getCategory().toUpperCase()))
                 .tags(Set.of(pasteCreateDto.getTag().split(" ")))
+                .expiration(Expiration.valueOf(pasteCreateDto.getExpiration()))
                 .createdAt(LocalDateTime.now())
                 .deletedAt(Expiration.fromDescription(pasteCreateDto.getExpiration()).getExpirationDate())
                 .access(Access.valueOf(pasteCreateDto.getAccess().toUpperCase()))

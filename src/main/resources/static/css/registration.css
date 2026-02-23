@@ -1,8 +1,7 @@
-/* Переменные проекта */
 :root {
     --bg-color: #f0f2f5;
     --card-bg: #ffffff;
-    --primary-color: #0077ff; /* Фирменный синий VK */
+    --primary-color: #0077ff;
     --primary-hover: #0066dd;
     --text-main: #2c2d2e;
     --text-muted: #818c99;
@@ -10,7 +9,6 @@
     --input-bg: #f2f3f5;
 }
 
-/* Базовые стили страницы */
 body {
     margin: 0;
     padding: 0;
@@ -27,7 +25,6 @@ body {
     padding: 20px;
 }
 
-/* Карточка регистрации */
 .auth-card {
     background: var(--card-bg);
     padding: 32px;
@@ -45,7 +42,6 @@ body {
     text-align: center;
 }
 
-/* Сетка полей ввода */
 .settings-grid {
     display: flex;
     flex-direction: column;
@@ -68,7 +64,7 @@ body {
     border-radius: 8px;
     background-color: var(--input-bg);
     color: var(--text-main);
-    box-sizing: border-box; /* Чтобы padding не раздувал ширину */
+    box-sizing: border-box;
     transition: all 0.2s ease;
     font-size: 0.95rem;
 }
@@ -80,7 +76,6 @@ body {
     box-shadow: 0 0 0 2px rgba(0, 119, 255, 0.1);
 }
 
-/* Секция отправки */
 .submit-section {
     display: flex;
     flex-direction: column;
@@ -89,7 +84,6 @@ body {
     border-top: 1px solid var(--border-color);
 }
 
-/* Кнопка */
 .btn-publish {
     width: 100%;
     padding: 12px;
@@ -111,7 +105,6 @@ body {
     transform: translateY(1px);
 }
 
-/* Футер формы */
 .auth-footer {
     font-size: 0.9rem;
     color: var(--text-muted);
@@ -127,4 +120,8 @@ body {
 
 .auth-footer a:hover {
     text-decoration: underline;
+}
+
+.auth-card {
+    transition: height 0.3s ease;
 }

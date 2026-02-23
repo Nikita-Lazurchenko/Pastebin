@@ -23,15 +23,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PasteService {
     private final PasteRepository pasteRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final PasteCreateMapper pasteCreateMapper;
     private final PasteViewMapper pasteViewMapper;
     private final GoogleDrive googleDrive;
 
     @Transactional
     public Paste save(PasteCreateDto pasteCreateDto, Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userService.findById(userId);
 
         Paste paste = pasteCreateMapper.mapFrom(pasteCreateDto);
         paste.setUser(user);

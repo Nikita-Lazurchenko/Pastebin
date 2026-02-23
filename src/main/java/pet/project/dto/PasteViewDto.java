@@ -10,7 +10,7 @@ public class PasteViewDto {
     private String paste;
     private String category;
     private String tag;
-    private String deletedAt;
+    private String expiration;
     private String createdAtRelative;
     private String title;
 }
