@@ -12,15 +12,15 @@
         <form th:action="@{/login}" method="post" th:object="${user}">
             <div class="settings-grid">
                 <div class="setting-item">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="username" placeholder="example@mail.com" th:field="*{email}" required>
-                    <span class="error-msg" id="emailError" style="color: #ff4d4d; font-size: 0.75rem; margin-top: 4px; display: block;"></span>
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="1van_333" required th:field="*{username}">
+                    <span class="error-msg" id="usernameError"></span>
                 </div>
                 <div class="setting-item">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" placeholder="••••••••" th:field="*{password}" required>
                     <p class="auth-footer" style="text-align: right; margin-top: 5px;">
-                        <a href="#" style="font-size: 0.8rem;">Forgot password?</a>
+                        <a href="/login/forgot-password" style="font-size: 0.8rem;">Forgot password?</a>
                     </p>
                     <span class="error-msg" id="passwordError" style="color: #ff4d4d; font-size: 0.75rem; margin-top: 4px; display: block;"></span>
                 </div>

@@ -21,6 +21,7 @@ public class User implements BaseEntity<Long> {
 
     private String firstname;
     private String lastname;
+    private String username;
 
     @Column(unique = true, nullable = false)
     private String email;

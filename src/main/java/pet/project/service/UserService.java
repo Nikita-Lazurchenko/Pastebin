@@ -33,13 +33,20 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.loadUserByEmail(email)
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.loadUserByUsername(username)
                 .map(user -> new org.springframework.security.core.userdetails.User(
-                        user.getEmail(),
+                        user.getUsername(),
                         user.getPassword(),
                         Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getRole()))
                 ))
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+    }
+
+    @Transactional
+    public int updateUserPassword(UserDto userDto) {
+        User user = userCreateMapper.mapFrom(userDto);
+
+        return userRepository.updateUserPassword(user.getPassword(), user.getUsername());
     }
 }

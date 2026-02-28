@@ -29,10 +29,17 @@ public class UserRepository {
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> loadUserByEmail(String email){
-        return entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
-                .setParameter("email",email)
+    public Optional<User> loadUserByUsername(String username){
+        return entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
+                .setParameter("username",username)
                 .getResultStream()
                 .findFirst();
+    }
+
+    public int updateUserPassword(String password, String username){
+        return  entityManager.createQuery("UPDATE User SET password = :password WHERE username = :username")
+                .setParameter("password", password)
+                .setParameter("username", username)
+                .executeUpdate();
     }
 }

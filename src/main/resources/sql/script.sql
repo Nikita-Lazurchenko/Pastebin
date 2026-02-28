@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS users(
     id BIGSERIAL PRIMARY KEY,
     firstname VARCHAR(50) NOT NULL,
     lastname VARCHAR(50) NOT NULL,
+    username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     role VARCHAR(50) NOT NULL
@@ -22,8 +23,6 @@ CREATE TABLE IF NOT EXISTS pastes(
     user_id BIGINT NOT NULL REFERENCES users(id)
 );
 
--- drop table if exists pastes;
--- drop table if exists users;
 
--- insert into users(id, firstname, lastname, email, password, role)
--- values (1, 'No', 'Name','email@gmail.com', 787898, USER)
+insert into users(id, firstname, lastname, username, email, password, role)
+values (1, 'No', 'Name', 'no_null1111' ,'email@gmail.com', 787898, USER)

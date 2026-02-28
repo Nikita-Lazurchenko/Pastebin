@@ -80,6 +80,6 @@ public class HomeController {
         model.addAttribute("tags", pasteViewDto.getTag());
         model.addAttribute("expiration",pasteViewDto.getExpiration());
 
-        return "show_paste";
+        return "show-paste";
     }
 }

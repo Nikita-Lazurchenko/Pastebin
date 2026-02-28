@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Подтверждение входа</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/registration.css}">
+</head>
+<body>
+<div class="container">
+    <div class="auth-card">
+        <h2 class="section-title">Подтверждение входа</h2>
+
+        <form th:action="@{/login/ott}" method="post">
+            <div class="settings-grid">
+                <div class="setting-item">
+                    <label for="token">Токен авторизации</label>
+                    <input type="text"
+                           id="token"
+                           name="token"
+                           th:value="${token}"
+                           placeholder="Введите токен из консоли"
+                           required>
+                </div>
+            </div>
+
+            <div class="submit-section">
+                <button type="submit" class="btn-publish">
+                    Подтвердить
+                </button>
+                <p class="auth-footer">
+                    Не пришел токен? <a th:href="@{/ott/generate}">Запросить заново</a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
