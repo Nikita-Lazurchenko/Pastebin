@@ -17,3 +17,14 @@ spring:
   storage:
     folder-id: 16HtRVAC-5aU2-RUu15XrNH7fc_wyrbSS
     main-path: https://drive.google.com/uc?export=view&id=
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: nikitalazurcenko@gmail.com
+    password: emdg ktel sger lncu
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
