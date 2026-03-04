@@ -6,11 +6,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pet.project.database.entity.*;
+import pet.project.database.repository.UserRepository;
 import pet.project.dto.PasteCreateDto;
 import pet.project.dto.PasteViewDto;
 import pet.project.mapper.PasteViewMapper;
 import pet.project.service.PasteService;
+import pet.project.service.UserService;
 
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class HomeController {
     private final PasteService pasteService;
+    private final UserRepository userRepository;
     private final PasteViewMapper pasteViewMapper;
 
     @GetMapping("/")
@@ -41,8 +45,16 @@ public class HomeController {
     }
 
     @PostMapping("/")
-    public String savePaste(@ModelAttribute("pasteCreation") PasteCreateDto pasteCreateDto, RedirectAttributes redirectAttributes){
-        Paste paste = pasteService.save(pasteCreateDto,1L);
+    public String savePaste(@ModelAttribute("pasteCreation") PasteCreateDto pasteCreateDto,
+                            RedirectAttributes redirectAttributes,
+                            Principal principal) {
+        System.out.println("Prin"+principal.getName());
+
+        User user = userRepository.loadUserByUsername(principal.getName()).orElseThrow();
+
+        System.out.println("User"+user);
+
+        Paste paste = pasteService.save(pasteCreateDto,user.getId());
 
         System.out.println(paste.getPasteLink());
         System.out.println(paste.getGoogleFileId());

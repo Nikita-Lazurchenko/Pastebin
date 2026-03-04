@@ -5,7 +5,10 @@ CREATE TABLE IF NOT EXISTS users(
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    role VARCHAR(50) NOT NULL
+    role VARCHAR(50) NOT NULL,
+    total_views BIGINT DEFAULT 0,
+    avg_views DOUBLE PRECISION DEFAULT 0.0,
+    rating DOUBLE PRECISION DEFAULT 0.0
 );
 
 CREATE TABLE IF NOT EXISTS pastes(
@@ -20,6 +23,7 @@ CREATE TABLE IF NOT EXISTS pastes(
     access VARCHAR(50) NOT NULL,
     password VARCHAR(255) NOT NULL,
     title VARCHAR(128) NOT NULL,
+    views BIGINT NOT NULL,
     user_id BIGINT NOT NULL REFERENCES users(id)
 );
 
