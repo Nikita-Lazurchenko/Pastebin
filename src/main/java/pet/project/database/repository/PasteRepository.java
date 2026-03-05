@@ -49,4 +49,13 @@ public class PasteRepository {
         return deletedGoogleFileId;
     }
 
+    @Transactional
+    public void updateViews(String hash, Long views){
+        entityManager.createQuery("UPDATE Paste p SET p.views = p.views + :views " +
+                "WHERE p.pasteLink = :hash")
+                .setParameter("hash", hash)
+                .setParameter("views", views)
+                .executeUpdate();
+    }
+
 }

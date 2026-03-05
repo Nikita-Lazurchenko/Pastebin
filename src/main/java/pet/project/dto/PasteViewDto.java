@@ -13,4 +13,5 @@ public class PasteViewDto {
     private String expiration;
     private String createdAtRelative;
     private String title;
+    private String views;
 }

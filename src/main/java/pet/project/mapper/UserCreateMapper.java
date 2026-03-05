@@ -20,6 +20,7 @@ public class UserCreateMapper implements Mapper<User, UserDto>{
                 .email(userDto.getEmail())
                 .username(userDto.getUsername())
                 .password(passwordEncoder.encode(userDto.getPassword()))
-                .role(userDto.getRole() != null ? Role.valueOf(userDto.getRole().toUpperCase()) : Role.USER).build();
+                .role(userDto.getRole() != null ? Role.valueOf(userDto.getRole().toUpperCase()) : Role.USER)
+                .build();
     }
 }

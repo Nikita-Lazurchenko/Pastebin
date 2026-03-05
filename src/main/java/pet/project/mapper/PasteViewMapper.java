@@ -21,6 +21,7 @@ public class PasteViewMapper implements Mapper<PasteViewDto, Paste>{
                 .expiration(paste.getExpiration().getDescription())
                 .createdAtRelative(prettyTime.format(paste.getCreatedAt()))
                 .title(paste.getTitle())
+                .paste(paste.getViews().toString())
                 .build();
     }
 }

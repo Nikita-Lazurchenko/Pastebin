@@ -11,7 +11,6 @@ import pet.project.dto.PasteCreateDto;
 import pet.project.dto.PasteViewDto;
 import pet.project.mapper.PasteViewMapper;
 import pet.project.service.PasteService;
-import pet.project.service.UserService;
 
 import java.security.Principal;
 import java.util.Arrays;
@@ -82,10 +81,12 @@ public class HomeController {
             pasteViewDto = pasteService.findByHash(hash);
         }else{
             pasteViewDto = pasteViewMapper.mapFrom(paste);
+            pasteViewDto.setViews("0");
             pasteViewDto.setPaste(text);
         }
 
         model.addAttribute("title", pasteViewDto.getTitle());
+        model.addAttribute("views", pasteViewDto.getViews());
         model.addAttribute("createdAtRelative", pasteViewDto.getCreatedAtRelative());
         model.addAttribute("text", pasteViewDto.getPaste());
         model.addAttribute("category", pasteViewDto.getCategory());

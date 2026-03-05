@@ -3,10 +3,7 @@ package pet.project.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import pet.project.dto.UserDto;
 import pet.project.service.UserService;
 
@@ -53,8 +50,7 @@ public class LoginController {
     public String changePassword(@ModelAttribute("user") UserDto userDto, Principal principal){
         userDto.setUsername(principal.getName());
 
-        System.out.println("UserDto"+userDto);
-        System.out.println(userService.updateUserPassword(userDto));
+        userService.updateUserPassword(userDto);
 
         return "redirect:/login";
     }

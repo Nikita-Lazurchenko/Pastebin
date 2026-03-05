@@ -15,7 +15,6 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Component
 @Entity
 @Table(schema = "pastebin", name = "pastes")
 public class Paste implements BaseEntity<Long>{
@@ -36,8 +35,13 @@ public class Paste implements BaseEntity<Long>{
     @Column(name = "tags", columnDefinition = "text[]")
     private Set<String> tags;
 
+    @Enumerated(EnumType.STRING)
     private Expiration expiration;
+
+    @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    @Column(nullable = false)
     private LocalDateTime deletedAt;
 
     @Enumerated(EnumType.STRING)
@@ -45,7 +49,12 @@ public class Paste implements BaseEntity<Long>{
 
     private String password;
 
+    @Column(nullable = false)
     private String title;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private Long views = 0L;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
