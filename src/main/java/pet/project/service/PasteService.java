@@ -15,9 +15,7 @@ import pet.project.mapper.PasteViewMapper;
 import pet.project.storage.GoogleDrive;
 import pet.project.storage.PasteFile;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -59,23 +57,30 @@ public class PasteService {
         return pasteViewDto;
     }
 
-    @Transactional
     @Scheduled(fixedDelay = 330000)
-    public void synchronizeViews(){
-        Set<String> keys =  redisPasteViews.keys("views:*");
-        if(keys.isEmpty()) return;
+    public void synchronizeViews() {
+        Set<String> keys = redisPasteViews.keys("views:*");
+        if (keys == null || keys.isEmpty()) return;
+
+        Map<String, Long> viewsMap = new HashMap<>();
 
         for (String key : keys) {
-            Long views = redisPasteViews.opsForValue().getAndDelete(key);
+            Long views = redisPasteViews.opsForValue().get(key);
 
             if (views != null && views > 0) {
-                try {
-                    String hash = key.substring(6);
-                    pasteRepository.updateViews(hash, views);
-                } catch (Exception e) {
-                    redisPasteViews.opsForValue().increment(key, views);
-                    System.out.println("Failed to sync views for hash:"+key+":"+views);
-                }
+                viewsMap.put(key.substring(6), views);
+            }
+        }
+
+        if (!viewsMap.isEmpty()) {
+            try {
+                pasteRepository.updateViewsBatch(viewsMap);
+
+                viewsMap.forEach((hash, processedViews) -> {
+                    redisPasteViews.opsForValue().decrement("views:" + hash, processedViews);
+                });
+
+            } catch (Exception e) {
             }
         }
     }

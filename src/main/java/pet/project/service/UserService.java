@@ -2,6 +2,8 @@ package pet.project.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -48,5 +50,15 @@ public class UserService implements UserDetailsService {
         User user = userCreateMapper.mapFrom(userDto);
 
         return userRepository.updateUserPassword(user.getPassword(), user.getUsername());
+    }
+
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * *")
+    public void refreshAllUserRatings(){
+        try{
+            userRepository.refreshAllUserRatings();
+        }catch (Exception e){
+            System.out.println("Ошибка подсчета рейтинга пользователя.");
+        }
     }
 }
