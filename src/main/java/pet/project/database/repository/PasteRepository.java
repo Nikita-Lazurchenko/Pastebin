@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import pet.project.database.entity.Access;
 import pet.project.database.entity.Paste;
 
 import java.sql.PreparedStatement;
@@ -75,6 +76,16 @@ public class PasteRepository {
                 return hashes.size();
             }
         });
+    }
+
+    @Transactional
+    public List<Paste> getFivePastes() {
+        String jpql = "SELECT p FROM Paste p WHERE p.access = :access ORDER BY p.createdAt DESC";
+
+        return entityManager.createQuery(jpql,Paste.class)
+                .setParameter("access", Access.PUBLIC)
+                .setMaxResults(5)
+                .getResultList();
     }
 
 }

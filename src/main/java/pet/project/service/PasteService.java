@@ -96,4 +96,13 @@ public class PasteService {
 
         System.out.println("Произошла очистка Pastes");
     }
+
+    @Transactional
+    public List<PasteViewDto> getFivePastes(){
+        List<Paste> pastes = pasteRepository.getFivePastes();
+
+        return pastes.stream()
+                .map(pasteViewMapper::mapFrom)
+                .toList();
+    }
 }

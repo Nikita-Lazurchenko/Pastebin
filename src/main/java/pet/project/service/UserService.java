@@ -61,4 +61,5 @@ public class UserService implements UserDetailsService {
             System.out.println("Ошибка подсчета рейтинга пользователя.");
         }
     }
+
 }

@@ -11,17 +11,17 @@ import java.util.Locale;
 @Component
 public class PasteViewMapper implements Mapper<PasteViewDto, Paste>{
     private final PrettyTime prettyTime = new PrettyTime(new Locale("ru"));
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public PasteViewDto mapFrom(Paste paste) {
         return PasteViewDto.builder()
+                .hash(paste.getPasteLink())
                 .category(paste.getCategory().getDisplayName())
                 .tag(String.join(", ",paste.getTags()))
                 .expiration(paste.getExpiration().getDescription())
                 .createdAtRelative(prettyTime.format(paste.getCreatedAt()))
                 .title(paste.getTitle())
-                .paste(paste.getViews().toString())
+                .views(paste.getViews().toString())
                 .build();
     }
 }

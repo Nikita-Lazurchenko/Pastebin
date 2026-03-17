@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Builder
 public class PasteViewDto {
+    private String hash;
     private String paste;
     private String category;
     private String tag;

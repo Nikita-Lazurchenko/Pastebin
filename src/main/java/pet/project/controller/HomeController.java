@@ -93,6 +93,9 @@ public class HomeController {
         model.addAttribute("tags", pasteViewDto.getTag());
         model.addAttribute("expiration",pasteViewDto.getExpiration());
 
+        List<PasteViewDto> pasteViewDtoList = pasteService.getFivePastes();
+        model.addAttribute("pastes", pasteViewDtoList);
+
         return "show-paste";
     }
 }
