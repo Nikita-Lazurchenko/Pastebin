@@ -22,6 +22,8 @@ public class PasteViewMapper implements Mapper<PasteViewDto, Paste>{
                 .createdAtRelative(prettyTime.format(paste.getCreatedAt()))
                 .title(paste.getTitle())
                 .views(paste.getViews().toString())
+                .userId(paste.getUser().getId())
+                .username(paste.getUser().getUsername())
                 .build();
     }
 }

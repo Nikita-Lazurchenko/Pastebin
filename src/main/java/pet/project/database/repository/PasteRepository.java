@@ -88,4 +88,13 @@ public class PasteRepository {
                 .getResultList();
     }
 
+    @Transactional
+    public List<Paste> getFiveAuthorPastes(Long userId) {
+        String jpql = "SELECT p FROM Paste p WHERE p.user.id = :userId ORDER BY p.createdAt DESC";
+
+        return entityManager.createQuery(jpql,Paste.class)
+                .setParameter("userId", userId)
+                .setMaxResults(5)
+                .getResultList();
+    }
 }

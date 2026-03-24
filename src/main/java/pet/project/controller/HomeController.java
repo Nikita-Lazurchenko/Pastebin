@@ -75,15 +75,7 @@ public class HomeController {
                             @ModelAttribute("paste") Paste paste,
                             @ModelAttribute("text") String text,
                             Model model){
-        PasteViewDto pasteViewDto;
-
-        if(paste.getPasteLink() == null){
-            pasteViewDto = pasteService.findByHash(hash);
-        }else{
-            pasteViewDto = pasteViewMapper.mapFrom(paste);
-            pasteViewDto.setViews("0");
-            pasteViewDto.setPaste(text);
-        }
+        PasteViewDto pasteViewDto = pasteService.findByHash(hash);
 
         model.addAttribute("title", pasteViewDto.getTitle());
         model.addAttribute("views", pasteViewDto.getViews());
@@ -93,8 +85,12 @@ public class HomeController {
         model.addAttribute("tags", pasteViewDto.getTag());
         model.addAttribute("expiration",pasteViewDto.getExpiration());
 
-        List<PasteViewDto> pasteViewDtoList = pasteService.getFivePastes();
-        model.addAttribute("pastes", pasteViewDtoList);
+        Long userId = pasteViewDto.getUserId();
+        List<PasteViewDto> fiveAuthorPasteList = pasteService.getFiveAuthorPastes(userId);
+        model.addAttribute("fiveAuthorPastes", fiveAuthorPasteList);
+
+        List<PasteViewDto> fivePublicPasteList = pasteService.getFivePastes();
+        model.addAttribute("fivePublicPastes", fivePublicPasteList);
 
         return "show-paste";
     }

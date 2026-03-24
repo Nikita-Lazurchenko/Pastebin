@@ -105,4 +105,13 @@ public class PasteService {
                 .map(pasteViewMapper::mapFrom)
                 .toList();
     }
+
+    @Transactional
+    public List<PasteViewDto> getFiveAuthorPastes(Long userId){
+        List<Paste> pastes = pasteRepository.getFiveAuthorPastes(userId);
+
+        return pastes.stream()
+                .map(pasteViewMapper::mapFrom)
+                .toList();
+    }
 }

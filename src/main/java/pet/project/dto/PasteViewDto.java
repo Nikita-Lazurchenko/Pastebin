@@ -15,4 +15,6 @@ public class PasteViewDto {
     private String createdAtRelative;
     private String title;
     private String views;
+    private Long userId;
+    private String username;
 }
