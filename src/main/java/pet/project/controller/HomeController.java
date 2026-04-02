@@ -22,10 +22,9 @@ import java.util.stream.Collectors;
 public class HomeController {
     private final PasteService pasteService;
     private final UserRepository userRepository;
-    private final PasteViewMapper pasteViewMapper;
 
     @GetMapping("/")
-    public String home(Model model) {
+    public String home(Model model, Principal principal) {
         model.addAttribute("pasteCreation", new PasteCreateDto());
 
         List<String> category  = Arrays.stream(Category.values()).map(DisplayEnum::getDisplayName).collect(Collectors.toList());
@@ -40,6 +39,9 @@ public class HomeController {
         List<String> hasPasswordOrNo = Arrays.stream(PasswordProtect.values()).map(DisplayEnum::getDisplayName).collect(Collectors.toList());
         model.addAttribute("passwordProtect", hasPasswordOrNo);
 
+        User user = userRepository.loadUserByUsername(principal.getName()).orElseThrow();
+        getAuthorAndUserPastes(model,user.getId());
+
         return "home";
     }
 
@@ -47,16 +49,9 @@ public class HomeController {
     public String savePaste(@ModelAttribute("pasteCreation") PasteCreateDto pasteCreateDto,
                             RedirectAttributes redirectAttributes,
                             Principal principal) {
-        System.out.println("Prin"+principal.getName());
-
         User user = userRepository.loadUserByUsername(principal.getName()).orElseThrow();
 
-        System.out.println("User"+user);
-
         Paste paste = pasteService.save(pasteCreateDto,user.getId());
-
-        System.out.println(paste.getPasteLink());
-        System.out.println(paste.getGoogleFileId());
 
         redirectAttributes.addFlashAttribute("paste", paste);
         redirectAttributes.addAttribute("text",pasteCreateDto.getPaste());
@@ -86,12 +81,17 @@ public class HomeController {
         model.addAttribute("expiration",pasteViewDto.getExpiration());
 
         Long userId = pasteViewDto.getUserId();
-        List<PasteViewDto> fiveAuthorPasteList = pasteService.getFiveAuthorPastes(userId);
-        model.addAttribute("fiveAuthorPastes", fiveAuthorPasteList);
-
-        List<PasteViewDto> fivePublicPasteList = pasteService.getFivePastes();
-        model.addAttribute("fivePublicPastes", fivePublicPasteList);
+        getAuthorAndUserPastes(model, userId);
 
         return "show-paste";
+    }
+
+    public void getAuthorAndUserPastes(Model model, Long userId) {
+        List<PasteViewDto> AuthorPasteList = pasteService.getAuthorPastes(userId, 0, 5);
+        System.out.println(AuthorPasteList);
+        model.addAttribute("PublicAuthorPastes", AuthorPasteList);
+
+        List<PasteViewDto> PublicPasteList = pasteService.getPublicPastes(0, 5);
+        model.addAttribute("PublicPastes", PublicPasteList);
     }
 }

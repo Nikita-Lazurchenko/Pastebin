@@ -98,8 +98,8 @@ public class PasteService {
     }
 
     @Transactional
-    public List<PasteViewDto> getFivePastes(){
-        List<Paste> pastes = pasteRepository.getFivePastes();
+    public List<PasteViewDto> getPublicPastes(int pageNumber, int pageSize) {
+        List<Paste> pastes = pasteRepository.getPublicPastes(pageNumber, pageSize);
 
         return pastes.stream()
                 .map(pasteViewMapper::mapFrom)
@@ -107,8 +107,8 @@ public class PasteService {
     }
 
     @Transactional
-    public List<PasteViewDto> getFiveAuthorPastes(Long userId){
-        List<Paste> pastes = pasteRepository.getFiveAuthorPastes(userId);
+    public List<PasteViewDto> getAuthorPastes(Long userId, int pageNumber, int pageSize) {
+        List<Paste> pastes = pasteRepository.getAuthorPastes(userId, pageNumber, pageSize);
 
         return pastes.stream()
                 .map(pasteViewMapper::mapFrom)

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import pet.project.database.entity.Access;
 import pet.project.database.entity.Paste;
+import pet.project.service.PasteService;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -79,22 +80,24 @@ public class PasteRepository {
     }
 
     @Transactional
-    public List<Paste> getFivePastes() {
+    public List<Paste> getPublicPastes(int pageNumber, int pageSize) {
         String jpql = "SELECT p FROM Paste p WHERE p.access = :access ORDER BY p.createdAt DESC";
 
         return entityManager.createQuery(jpql,Paste.class)
                 .setParameter("access", Access.PUBLIC)
-                .setMaxResults(5)
+                .setFirstResult(pageNumber * pageSize)
+                .setMaxResults(pageSize)
                 .getResultList();
     }
 
     @Transactional
-    public List<Paste> getFiveAuthorPastes(Long userId) {
+    public List<Paste> getAuthorPastes(Long userId, int pageNumber, int pageSize) {
         String jpql = "SELECT p FROM Paste p WHERE p.user.id = :userId ORDER BY p.createdAt DESC";
 
         return entityManager.createQuery(jpql,Paste.class)
                 .setParameter("userId", userId)
-                .setMaxResults(5)
+                .setFirstResult(pageNumber * pageSize)
+                .setMaxResults(pageSize)
                 .getResultList();
     }
 }
