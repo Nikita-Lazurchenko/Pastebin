@@ -2,7 +2,10 @@ package pet.project.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pet.project.database.entity.Paste;
@@ -10,6 +13,7 @@ import pet.project.database.entity.User;
 import pet.project.database.repository.PasteRepository;
 import pet.project.dto.PasteCreateDto;
 import pet.project.dto.PasteViewDto;
+import pet.project.exception.PasteNotFoundException;
 import pet.project.mapper.PasteCreateMapper;
 import pet.project.mapper.PasteViewMapper;
 import pet.project.storage.GoogleDrive;
@@ -19,6 +23,7 @@ import java.util.*;
 
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class PasteService {
     private final PasteRepository pasteRepository;
@@ -35,16 +40,29 @@ public class PasteService {
         Paste paste = pasteCreateMapper.mapFrom(pasteCreateDto);
         paste.setUser(user);
 
-        Optional<PasteFile> pasteFile = googleDrive.uploadFileToDrive(pasteCreateDto.getPaste());
-        paste.setPasteLink(pasteFile.orElseThrow().pasteId());
-        paste.setGoogleFileId(pasteFile.get().FileId());
+        PasteFile pasteFile = googleDrive.uploadFileToDrive(pasteCreateDto.getPaste())
+                .orElseThrow(() -> new RuntimeException("Failed to upload file to Google Drive"));
+        paste.setPasteLink(pasteFile.pasteId());
+        paste.setGoogleFileId(pasteFile.fileId());
 
-        return pasteRepository.save(paste);
+        try {
+            return pasteRepository.save(paste);
+        } catch (Exception e) {
+            log.error("DB error, deleting file from Drive: {}", paste.getGoogleFileId());
+            googleDrive.deleteFileFromDrive(paste.getGoogleFileId());
+            throw new RuntimeException("Could not save paste, cleaning up cloud storage", e);
+        }
     }
 
     @Transactional
     public PasteViewDto findByHash(String hash) {
-        Paste paste = pasteRepository.findByHash(hash);
+        Paste paste;
+        try {
+            paste = pasteRepository.findByHash(hash).orElseThrow();
+        }catch (Exception e){
+            log.info("Paste with hash {} not found", hash);
+            throw new PasteNotFoundException("Paste not found %s".formatted(hash));
+        }
 
         PasteViewDto pasteViewDto = pasteViewMapper.mapFrom(paste);
         pasteViewDto.setPaste(googleDrive.downloadFileFromDrive(paste.getGoogleFileId()).orElseThrow());
@@ -59,29 +77,36 @@ public class PasteService {
 
     @Scheduled(fixedDelay = 330000)
     public void synchronizeViews() {
-        Set<String> keys = redisPasteViews.keys("views:*");
-        if (keys == null || keys.isEmpty()) return;
+        ScanOptions options = ScanOptions.scanOptions().match("views:*").count(100).build();
 
-        Map<String, Long> viewsMap = new HashMap<>();
+        try (Cursor<String> cursor = redisPasteViews.scan(options)) {
+            Map<String, Long> viewsMap = new HashMap<>();
 
-        for (String key : keys) {
-            Long views = redisPasteViews.opsForValue().get(key);
+            while (cursor.hasNext()) {
+                String key = cursor.next();
+                Long views = redisPasteViews.opsForValue().get(key);
 
-            if (views != null && views > 0) {
-                viewsMap.put(key.substring(6), views);
+                if (views != null && views > 0) {
+                    viewsMap.put(key.substring(6), views);
+                }
             }
-        }
 
-        if (!viewsMap.isEmpty()) {
-            try {
-                pasteRepository.updateViewsBatch(viewsMap);
+            if (!viewsMap.isEmpty()) {
+                log.info("Starting sync of {} items", viewsMap.size());
+                try {
+                    pasteRepository.updateViewsBatch(viewsMap);
 
-                viewsMap.forEach((hash, processedViews) -> {
-                    redisPasteViews.opsForValue().decrement("views:" + hash, processedViews);
-                });
+                    viewsMap.forEach((hash, processedViews) -> {
+                        redisPasteViews.opsForValue().decrement("views:" + hash, processedViews);
+                    });
 
-            } catch (Exception e) {
+                    log.info("Sync finished successfully");
+                } catch (Exception e) {
+                    log.error("Failed to sync views to DB", e);
+                }
             }
+        } catch (Exception e) {
+            log.error("Error during Redis scan", e);
         }
     }
 
@@ -94,7 +119,7 @@ public class PasteService {
             googleDriveFileIds.forEach(googleDrive::deleteFileFromDrive);
         }
 
-        System.out.println("Произошла очистка Pastes");
+        log.info("Expired pastes were cleared");
     }
 
     @Transactional

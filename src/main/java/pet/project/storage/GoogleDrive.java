@@ -1,19 +1,23 @@
 package pet.project.storage;
 
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.InputStreamContent;
 import com.google.api.services.drive.Drive;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Optional;
 
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GoogleDrive{
@@ -44,9 +48,10 @@ public class GoogleDrive{
 
             return Optional.of(new PasteFile(fileName, fileId));
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return Optional.empty();
+        } catch (IOException e) {
+            log.error("Upload file to drive failed with exception: {}",e.getMessage());
+
+            throw new RuntimeException(e);
         }
     }
 
@@ -57,9 +62,10 @@ public class GoogleDrive{
                     .executeMediaAndDownloadTo(outputStream);
 
             return Optional.of(new String(outputStream.toByteArray(), StandardCharsets.UTF_8));
-        } catch (Exception e) {
-            System.out.println("Ошибка при скачивании: " + e.getMessage());
-            return Optional.empty();
+        } catch (IOException e) {
+            log.error("Download file from drive failed with exception: {}",e.getMessage());
+
+            throw new RuntimeException(e);
         }
     }
 
@@ -69,8 +75,10 @@ public class GoogleDrive{
             drive.files().delete(fileId)
                     .setSupportsAllDrives(true)
                     .execute();
-        } catch (Exception e) {
-            System.out.println("Ошибка при удалении файла с ID " + fileId + ": " + e.getMessage());
+        } catch (IOException e) {
+            log.error("Delete file from drive failed with exception: {}",e.getMessage());
+
+            throw new RuntimeException(e);
         }
     }
 }

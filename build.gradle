@@ -55,6 +55,10 @@ dependencies {
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+    //Logging
+    implementation 'org.springframework.boot:spring-boot-starter-logging:4.0.5'
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2:4.0.5'
+
     // Testing
     testImplementation platform('org.testcontainers:testcontainers-bom:1.20.4')
 

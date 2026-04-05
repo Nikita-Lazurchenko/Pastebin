@@ -36,7 +36,7 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/login/change-password", true)
                 )
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/login","/login/**", "/ott/generate", "/registration", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/login","/login/**", "/ott/generate", "/registration", "/css/**", "/js/**", "/favicon.ico").permitAll()
                         .requestMatchers("/login/change-password").access(factorGrantedAuthority.authenticated())
                         .anyRequest().authenticated()
                 );

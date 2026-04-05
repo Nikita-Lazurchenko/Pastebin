@@ -59,12 +59,6 @@ public class HomeController {
         return "redirect:/"+paste.getPasteLink();
     }
 
-    @GetMapping("/favicon.ico")
-    @ResponseBody
-    void returnNoFavicon() {
-       //Убрать метод когда подключишь Spring Security
-    }
-
     @GetMapping("/{hash}")
     public String showPaste(@PathVariable("hash") String hash,
                             @ModelAttribute("paste") Paste paste,

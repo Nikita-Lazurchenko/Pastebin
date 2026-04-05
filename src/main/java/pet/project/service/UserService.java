@@ -2,28 +2,31 @@ package pet.project.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pet.project.database.entity.User;
 import pet.project.database.repository.UserRepository;
 import pet.project.dto.UserDto;
+import pet.project.exception.UserNotFoundException;
+import pet.project.exception.UserRefreshRatingFailedException;
 import pet.project.mapper.UserCreateMapper;
 
 import java.util.Collections;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final UserCreateMapper userCreateMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    @Transactional
     public User save(UserDto userDto) {
         User user = userCreateMapper.mapFrom(userDto);
 
@@ -31,7 +34,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User findById(Long id){
-        return userRepository.findById(id).orElseThrow();
+        return userRepository.findById(id).orElseThrow(() ->new UserNotFoundException(id));
     }
 
     @Override
@@ -45,11 +48,11 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
-    @Transactional
     public int updateUserPassword(UserDto userDto) {
-        User user = userCreateMapper.mapFrom(userDto);
+        String username = userDto.getUsername();
+        String password = passwordEncoder.encode(userDto.getPassword());
 
-        return userRepository.updateUserPassword(user.getPassword(), user.getUsername());
+        return userRepository.updateUserPassword(username, password);
     }
 
     @Transactional
@@ -58,7 +61,9 @@ public class UserService implements UserDetailsService {
         try{
             userRepository.refreshAllUserRatings();
         }catch (Exception e){
-            System.out.println("Ошибка подсчета рейтинга пользователя.");
+            log.error("User refresh failed: {}",e.getMessage());
+
+            throw new UserRefreshRatingFailedException();
         }
     }
 

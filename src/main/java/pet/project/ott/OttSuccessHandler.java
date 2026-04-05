@@ -3,6 +3,7 @@ package pet.project.ott;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.ott.OneTimeToken;
 import org.springframework.security.web.authentication.ott.OneTimeTokenGenerationSuccessHandler;
 import org.springframework.security.web.util.UrlUtils;
@@ -14,6 +15,7 @@ import pet.project.service.EmailService;
 
 import java.io.IOException;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class OttSuccessHandler implements OneTimeTokenGenerationSuccessHandler{
@@ -34,7 +36,7 @@ public class OttSuccessHandler implements OneTimeTokenGenerationSuccessHandler{
 
         emailService.sendMagicLink(user.getEmail(), magicLink);
 
-        System.out.println("Link: " + magicLink);
+        log.info("Magic link: {}", magicLink);
 
         response.sendRedirect("/login/ott?sent=true");
     }

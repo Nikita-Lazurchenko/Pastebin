@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import pet.project.database.entity.Access;
 import pet.project.database.entity.Paste;
-import pet.project.service.PasteService;
+
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -16,10 +16,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-@RequiredArgsConstructor
+
 @Repository
-public class PasteRepository {
+@RequiredArgsConstructor
+public class PasteRepository{
     private final EntityManager entityManager;
     private final JdbcTemplate jdbcTemplate;
 
@@ -33,11 +35,13 @@ public class PasteRepository {
         }
     }
 
-    public Paste findByHash(String hash) {
-        return entityManager.createQuery(
+    @Transactional(readOnly = true)
+    public Optional<Paste> findByHash(String hash) {
+        return Optional.ofNullable(entityManager.createQuery(
                         "SELECT p FROM Paste p WHERE p.pasteLink = :hash", Paste.class)
                 .setParameter("hash", hash)
-                .getSingleResult();
+                .getSingleResult());
+
     }
 
     @Transactional
@@ -50,8 +54,8 @@ public class PasteRepository {
                 .getResultList();
 
         if (!deletedGoogleFileId.isEmpty()) {
-            entityManager.createQuery("DELETE FROM Paste p WHERE p.deletedAt < :now")
-                    .setParameter("now", now)
+            entityManager.createQuery("DELETE FROM Paste p WHERE p.googleFileId IN :ids")
+                    .setParameter("ids", deletedGoogleFileId)
                     .executeUpdate();
         }
 
@@ -60,11 +64,12 @@ public class PasteRepository {
 
     @Transactional
     public void updateViewsBatch(Map<String, Long> viewsMap) {
+        if (viewsMap.isEmpty()) return;
+
+        List<String> hashes = new ArrayList<>(viewsMap.keySet());
         String sql = "UPDATE paste SET views = COALESCE(views, 0) + ? WHERE paste_link = ?";
 
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            final List<String> hashes = new ArrayList<>(viewsMap.keySet());
-
             @Override
             public void setValues(PreparedStatement preparedStatement, int i) throws SQLException {
                 String hash = hashes.get(i);
@@ -79,7 +84,7 @@ public class PasteRepository {
         });
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Paste> getPublicPastes(int pageNumber, int pageSize) {
         String jpql = "SELECT p FROM Paste p WHERE p.access = :access ORDER BY p.createdAt DESC";
 
@@ -90,7 +95,7 @@ public class PasteRepository {
                 .getResultList();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Paste> getAuthorPastes(Long userId, int pageNumber, int pageSize) {
         String jpql = "SELECT p FROM Paste p WHERE p.user.id = :userId ORDER BY p.createdAt DESC";
 
