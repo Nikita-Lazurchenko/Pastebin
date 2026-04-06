@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import pet.project.database.entity.Role;
-import pet.project.dto.UserDto;
+import pet.project.dto.UserCreateDto;
 import pet.project.service.UserService;
 
 @Controller
@@ -17,16 +17,16 @@ public class RegistrationController {
 
     @GetMapping("/registration")
     public String fillingRegistrationData(Model model){
-        model.addAttribute("user", new UserDto());
+        model.addAttribute("user", new UserCreateDto());
 
         return "registration";
     }
 
     @PostMapping("/registration")
-    public String saveRegistrationData(@ModelAttribute("user") UserDto userDto){
-        userDto.setRole(String.valueOf(Role.USER));
+    public String saveRegistrationData(@ModelAttribute("user") UserCreateDto userCreateDto){
+        userCreateDto.setRole(String.valueOf(Role.USER));
 
-        userService.save(userDto);
+        userService.save(userCreateDto);
 
         return "redirect:/";
     }

@@ -32,7 +32,7 @@ public class OttSuccessHandler implements OneTimeTokenGenerationSuccessHandler{
                 .queryParam("token", oneTimeToken.getTokenValue())
                 .toUriString();
 
-        User user = userRepository.loadUserByUsername(oneTimeToken.getUsername()).orElseThrow();
+        User user = userRepository.findUserByUsername(oneTimeToken.getUsername()).orElseThrow();
 
         emailService.sendMagicLink(user.getEmail(), magicLink);
 

@@ -34,8 +34,20 @@ public class UserRepository {
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> loadUserByUsername(String username){
-        return entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
+    public Optional<Long> getUserIdByUsername(String username){
+        return entityManager.createQuery(
+                        "SELECT u.id FROM User u WHERE u.username = :username",
+                        Long.class)
+                .setParameter("username",username)
+                .getResultStream()
+                .findFirst();
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<User> findUserByUsername(String username){
+        return entityManager.createQuery(
+                "SELECT u.id FROM User u WHERE u.username = :username",
+                        User.class)
                 .setParameter("username",username)
                 .getResultStream()
                 .findFirst();

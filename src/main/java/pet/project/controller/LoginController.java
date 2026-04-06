@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import pet.project.dto.UserDto;
+import pet.project.dto.ChangeUserPasswordDto;
+import pet.project.dto.UserCreateDto;
 import pet.project.service.UserService;
 
 import java.security.Principal;
@@ -16,14 +17,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public String login(Model model){
-        model.addAttribute("user", new UserDto());
-
-        return "login";
-    }
-
-    @PostMapping("/login")
-    public String validateUser(@ModelAttribute("user") UserDto userDto){
-        System.out.println(userDto);
+        model.addAttribute("user", new UserCreateDto());
 
         return "login";
     }
@@ -41,16 +35,19 @@ public class LoginController {
 
     @GetMapping("/login/change-password")
     public String changePasswordPage(Model model){
-        model.addAttribute("user", new UserDto());
+        model.addAttribute("user", new ChangeUserPasswordDto());
 
         return "change-password";
     }
 
     @PostMapping("/login/change-password")
-    public String changePassword(@ModelAttribute("user") UserDto userDto, Principal principal){
-        userDto.setUsername(principal.getName());
+    public String changePassword(@ModelAttribute("user") ChangeUserPasswordDto changeUserPasswordDto, Principal principal){
+        changeUserPasswordDto.setUsername(principal.getName());
 
-        userService.updateUserPassword(userDto);
+        String username = changeUserPasswordDto.getUsername();
+        String newPassword = changeUserPasswordDto.getPassword();
+
+        userService.updateUserPassword(username, newPassword);
 
         return "redirect:/login";
     }

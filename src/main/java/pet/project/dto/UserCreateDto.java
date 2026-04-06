@@ -3,7 +3,7 @@ package pet.project.dto;
 import lombok.Data;
 
 @Data
-public class UserDto {
+public class UserCreateDto {
     private String firstname;
     private String lastname;
     private String username;

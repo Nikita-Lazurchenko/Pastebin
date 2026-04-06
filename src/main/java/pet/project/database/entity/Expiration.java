@@ -4,13 +4,14 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 @Getter
 @RequiredArgsConstructor
-public enum Expiration {
+public enum Expiration{
     NEVER("Never", now -> now.plusYears(100)),
     TEN_MINUTES("10 Minutes", now -> now.plusMinutes(10)),
     ONE_HOUR("1 Hour", now -> now.plusHours(1)),
@@ -32,5 +33,11 @@ public enum Expiration {
 
     public LocalDateTime getExpirationDate() {
         return this.expirationStrategy.apply(LocalDateTime.now());
+    }
+
+    public static List<String> getDescriptions() {
+        return Arrays.stream(values())
+                .map(Expiration::getDescription)
+                .collect(Collectors.toList());
     }
 }
